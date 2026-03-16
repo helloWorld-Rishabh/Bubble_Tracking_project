@@ -1,22 +1,5 @@
 # Bubble Detection Project
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Problem Statement](#problem-statement)
-- [Approaches Explored](#approaches-explored)
-  - [1. OpenCV Background Removal](#1-opencv-background-removal)
-  - [2. SAM2 Object Segmentation + Tracking](#2-sam2-object-segmentation--tracking)
-  - [3. YOLO World (Zero-Shot Tracker)](#3-yolo-world-zero-shot-tracker)
-  - [4. SAM2 + Cotracker](#4-sam2--cotracker)
-  - [5. Hybrid SAM2 + YOLO](#5-hybrid-sam2--yolo)
-  - [6. FastSAM + YOLO](#6-fastsam--yolo-recommended)
-- [Performance Comparison](#performance-comparison)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Future Work](#future-work)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Introduction
 
 This project focuses on developing an efficient and accurate system for detecting and tracking bubbles in video footage. Bubble detection presents unique challenges due to the transparent nature of bubbles, their dynamic behavior (merging, breaking, deformation), and the need for real-time or near-real-time processing capabilities.
@@ -88,9 +71,11 @@ Detecting and tracking bubbles in video presents several unique challenges:
 
 **Original Video**
 <!-- Insert original video here -->
-```
-[Original Video Placeholder]
-```
+
+
+https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
+
+
 
 </td>
 <td width="50%">
@@ -282,18 +267,22 @@ The model can achieve near-SAM2 quality at a fraction of the cost.
 
 **Original Video**
 <!-- Insert original video here -->
-```
-[Original Video Placeholder]
-```
+
+https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
+
 
 </td>
 <td width="50%">
 
 **FastSAM + YOLO Output**
 <!-- Insert processed video here -->
-```
-[FastSAM Output Video Placeholder]
-```
+
+
+
+https://github.com/user-attachments/assets/19a4875c-baed-4ff0-a909-3556084b9133
+
+
+
 
 </td>
 </tr>
@@ -347,213 +336,6 @@ The model can achieve near-SAM2 quality at a fraction of the cost.
 - Can afford longer initialization time
 - Fixed environment with controlled conditions
 
-## Installation
 
-### Prerequisites
-- Python 3.8+
-- CUDA-capable GPU (recommended: 8GB+ VRAM)
-- Google Colab account (for notebooks)
-
-### Dependencies
-
-```bash
-# Core dependencies
-pip install torch torchvision torchaudio
-pip install ultralytics  # For YOLO
-pip install opencv-python
-pip install numpy pandas matplotlib
-
-# For SAM2
-pip install git+https://github.com/facebookresearch/segment-anything-2.git
-
-# For FastSAM
-pip install git+https://github.com/CASIA-IVA-Lab/FastSAM.git
-
-# Additional utilities
-pip install tqdm
-pip install scikit-learn
 ```
 
-## Usage
-
-### Quick Start with FastSAM + YOLO (Recommended)
-
-```python
-# 1. Annotate frames using FastSAM
-from fastsam import FastSAM
-from ultralytics import YOLO
-
-# Initialize FastSAM
-fastsam_model = FastSAM('FastSAM-x.pt')
-
-# Annotate 50 frames
-annotations = annotate_frames_with_fastsam(
-    video_path='input_video.mp4',
-    num_frames=50,
-    model=fastsam_model
-)
-
-# 2. Train YOLO on annotated frames
-yolo_model = YOLO('yolov8n.pt')
-yolo_model.train(
-    data='bubble_dataset.yaml',
-    epochs=100,
-    imgsz=640,
-    batch=16
-)
-
-# 3. Run inference on full video
-results = yolo_model.predict(
-    source='input_video.mp4',
-    save=True,
-    conf=0.25
-)
-```
-
-### Detailed Workflow
-
-#### 1. Frame Extraction
-```python
-import cv2
-
-def extract_frames(video_path, num_frames=50):
-    cap = cv2.VideoCapture(video_path)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    interval = total_frames // num_frames
-    
-    frames = []
-    for i in range(num_frames):
-        cap.set(cv2.CAP_PROP_POS_FRAMES, i * interval)
-        ret, frame = cap.read()
-        if ret:
-            frames.append(frame)
-    
-    cap.release()
-    return frames
-```
-
-#### 2. FastSAM Annotation
-```python
-def annotate_with_fastsam(frames, model):
-    annotations = []
-    for frame in frames:
-        results = model(
-            frame,
-            device='cuda',
-            retina_masks=True,
-            imgsz=1024,
-            conf=0.4,
-            iou=0.9
-        )
-        annotations.append(results)
-    return annotations
-```
-
-#### 3. YOLO Training
-```python
-# Create dataset in YOLO format
-# dataset.yaml:
-# train: path/to/train/images
-# val: path/to/val/images
-# nc: 1  # number of classes (bubble)
-# names: ['bubble']
-
-model = YOLO('yolov8n.pt')
-model.train(
-    data='dataset.yaml',
-    epochs=100,
-    imgsz=640,
-    batch=16,
-    patience=50,
-    save=True,
-    device='cuda'
-)
-```
-
-#### 4. Inference
-```python
-# Load trained model
-model = YOLO('runs/detect/train/weights/best.pt')
-
-# Process video
-results = model.predict(
-    source='test_video.mp4',
-    save=True,
-    conf=0.25,
-    iou=0.45,
-    show_labels=True,
-    show_conf=True
-)
-```
-
-## Future Work
-
-### Immediate Improvements
-1. **Automated Hyperparameter Tuning**: Implement grid search or Bayesian optimization for YOLO training parameters
-2. **Active Learning**: Develop system to identify and annotate challenging frames automatically
-3. **Multi-Environment Training**: Create a diverse dataset spanning multiple environments to improve generalization
-4. **Real-time Processing**: Optimize pipeline for true real-time performance on edge devices
-
-### Advanced Features
-1. **Bubble Size Estimation**: Implement surface area calculation using detected boundaries
-2. **Trajectory Analysis**: Track individual bubble paths and analyze movement patterns
-3. **Merger/Split Detection**: Explicitly detect and track bubble merging and splitting events
-4. **Density Mapping**: Create heat maps showing bubble density across frame regions
-
-### Model Enhancements
-1. **Transfer Learning**: Experiment with domain adaptation techniques for better generalization
-2. **Ensemble Methods**: Combine multiple detection methods for improved accuracy
-3. **Attention Mechanisms**: Integrate attention layers to focus on bubble-specific features
-4. **Synthetic Data Generation**: Create synthetic bubble datasets for data augmentation
-
-### Production Deployment
-1. **Model Optimization**: Quantization and pruning for edge device deployment
-2. **API Development**: REST API for bubble detection as a service
-3. **Web Interface**: User-friendly interface for video upload and analysis
-4. **Batch Processing**: System for processing multiple videos in parallel
-
-### Research Directions
-1. **3D Bubble Reconstruction**: Estimate 3D bubble shapes from 2D video
-2. **Physics-Informed Models**: Incorporate fluid dynamics constraints into detection
-3. **Temporal Consistency**: Improve frame-to-frame consistency using temporal models
-4. **Anomaly Detection**: Identify unusual bubble behavior automatically
-
-## Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. **Report Issues**: Found a bug or have a suggestion? Open an issue
-2. **Improve Documentation**: Help us make this README and code more understandable
-3. **Optimize Code**: Submit PRs for performance improvements
-4. **Add Features**: Implement items from the Future Work section
-5. **Share Results**: Share your bubble detection results and use cases
-
-### Development Setup
-```bash
-git clone https://github.com/yourusername/bubble-detection.git
-cd bubble-detection
-pip install -r requirements.txt
-```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Meta AI for SAM2 (Segment Anything Model 2)
-- Ultralytics for YOLO implementation
-- CASIA-IVA-Lab for FastSAM
-- Google Colab for providing GPU resources
-
-## Contact
-
-For questions, suggestions, or collaborations, please open an issue or contact [your email].
-
----
-
-**Last Updated**: March 2026
-
-**Project Status**: Active Development
-
-**Version**: 1.0.0
