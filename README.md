@@ -82,9 +82,11 @@ https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
 
 **SAM2 Output**
 <!-- Insert SAM2 processed video here -->
-```
-[SAM2 Output Video Placeholder]
-```
+
+
+https://github.com/user-attachments/assets/49c29cd4-f29d-433e-810f-ae3399b7a1ae
+
+
 
 </td>
 </tr>
@@ -275,17 +277,30 @@ https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
 <td width="50%">
 
 **FastSAM + YOLO Output**
-<!-- Insert processed video here -->
+
+
+https://github.com/user-attachments/assets/39b7c18a-32b0-4d72-9709-eda0d00f3d9d
 
 
 
-https://github.com/user-attachments/assets/19a4875c-baed-4ff0-a909-3556084b9133
+
 
 
 
 
 </td>
 </tr>
+</table>
+
+<table style="width:100%">
+  <tr>
+    <th style="text-align:center">Original Video</th>
+    <th style="text-align:center">Tracked Output</th>
+  </tr>
+  <tr>
+    <td><video src="./path/to/your/original_video.mp4" width="100%" autoplay loop muted></video></td>
+    <td><video src="output/fastsam+yolo.mp4" width="100%" autoplay loop muted></video></td>
+  </tr>
 </table>
 
 **Processing Stats**:
