@@ -160,6 +160,7 @@ New Environment → SAM2 Annotation (50 frames) → YOLO Training → Deployment
 ```
 ### Output
 <img width="30%" alt="image" src="https://github.com/user-attachments/assets/f180e367-39ee-4ff6-ac7e-dda24e4fa9d3" />
+
 [Link to output Video](https://drive.google.com/drive/folders/1npRLznJgcpWgrZLcNY9AMAse3KD807LM?usp=drive_link)
 
 
