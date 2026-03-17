@@ -63,34 +63,11 @@ Detecting and tracking bubbles in video presents several unique challenges:
 - **Not Suitable for Real-time**: Processing speed makes it impractical for live applications
 - **High Memory Usage**: Requires significant GPU memory
 
-#### Video Comparison:
+#### Output
+<img width="30%" alt="image" src="https://github.com/user-attachments/assets/9d47d74a-9246-4fd9-88e1-3924949e9e37" />
 
-<table>
-<tr>
-<td width="50%">
+[link to output](https://drive.google.com/file/d/1JQMk_UNNulswvWm3UDjV4py1S8Dniq7U/view?usp=sharing)
 
-**Original Video**
-<!-- Insert original video here -->
-
-
-https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
-
-
-
-</td>
-<td width="50%">
-
-**SAM2 Output**
-<!-- Insert SAM2 processed video here -->
-
-
-https://github.com/user-attachments/assets/49c29cd4-f29d-433e-810f-ae3399b7a1ae
-
-
-
-</td>
-</tr>
-</table>
 
 **Processing Stats**:
 - Video Duration: 15 seconds
@@ -181,31 +158,10 @@ This approach can be deployed as an **environment-specific model** with an initi
 ```
 New Environment → SAM2 Annotation (50 frames) → YOLO Training → Deployment
 ```
+### Output
+<img width="30%" alt="image" src="https://github.com/user-attachments/assets/f180e367-39ee-4ff6-ac7e-dda24e4fa9d3" />
+[Link to output Video](https://drive.google.com/drive/folders/1npRLznJgcpWgrZLcNY9AMAse3KD807LM?usp=drive_link)
 
-#### Video Comparison:
-
-<table>
-<tr>
-<td width="50%">
-
-**Original Video**
-<!-- Insert original video here -->
-```
-[Original Video Placeholder]
-```
-
-</td>
-<td width="50%">
-
-**Hybrid SAM2 + YOLO Output**
-<!-- Insert processed video here -->
-```
-[Hybrid Output Video Placeholder]
-```
-
-</td>
-</tr>
-</table>
 
 **Processing Stats**:
 - Training Frames Required: 50
@@ -261,47 +217,10 @@ With proper tuning of:
 
 The model can achieve near-SAM2 quality at a fraction of the cost.
 
-#### Video Comparison:
+### Output
+<img width="30%" alt="image" src="https://github.com/user-attachments/assets/c082b648-d098-46c8-8fa0-eb4149c500bd" />
 
-<table>
-<tr>
-<td width="50%">
-
-**Original Video**
-<!-- Insert original video here -->
-
-https://github.com/user-attachments/assets/30152372-2f63-4565-9b78-c82bbdff9638
-
-
-</td>
-<td width="50%">
-
-**FastSAM + YOLO Output**
-
-
-https://github.com/user-attachments/assets/39b7c18a-32b0-4d72-9709-eda0d00f3d9d
-
-
-
-
-
-
-
-
-</td>
-</tr>
-</table>
-
-<table style="width:100%">
-  <tr>
-    <th style="text-align:center">Original Video</th>
-    <th style="text-align:center">Tracked Output</th>
-  </tr>
-  <tr>
-    <td><video src="./path/to/your/original_video.mp4" width="100%" autoplay loop muted></video></td>
-    <td><video src="output/fastsam+yolo.mp4" width="100%" autoplay loop muted></video></td>
-  </tr>
-</table>
+[Link to Output video](https://drive.google.com/file/d/1ny6EOeAofOLkaBovI4TvP_jJLLHBqPsj/view?usp=sharing)
 
 **Processing Stats**:
 - Annotation Time: ~10-15 minutes (50 frames)
