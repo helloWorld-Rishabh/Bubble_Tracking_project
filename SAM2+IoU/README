@@ -1,0 +1,71 @@
+# SAM 2 Video Tracker: Execution & Config Guide
+
+This notebook is a two-stage pipeline. **Stage 1** detects objects using SAM 2 and saves them as masks. **Stage 2** processes those masks to create persistent tracks with unique IDs.
+
+---
+
+## 1. How to Run
+
+### Option A: The Notebook Way
+The easiest way to run the code is to update the variables in the **"Global Configurations"** cell and run all cells. The script at the bottom of the notebook is designed to automatically link Phase 1 and Phase 2.
+
+### Option B: The CLI Way
+If you export the notebook as a `.py` script, you can override settings via the terminal:
+```bash
+python script.py --input my_video.mp4 --track_out_video final_tracked.mp4
+```
+
+---
+
+## 1. CLI Options 
+The script uses `argparse` to allow dynamic overrides of the config paths.
+
+| Argument | Overrides Config Variable |
+| :--- | :--- |
+| `--input` | `IN_VIDEO` |
+| `--out_json` | `OUT_JSON` |
+| `--out_overlay` | `OUT_OVERLAY` |
+| `--out_masks` | `OUT_MASKS` |
+| `--track_out_json` | `TRACKER_CONFIG["output_json"]` |
+| `--track_out_video` | `TRACKER_CONFIG["output_video"]` |
+
+---
+
+## 2. Configuring File Paths (Input/Output)
+
+You can define where files are read from and saved to in two ways: **Global Constants** or the **`TRACKER_CONFIG`** dictionary.
+
+### Global Path Constants
+Located at the top of the notebook, these handle the raw detection phase (Stage 1):
+* **`IN_VIDEO`**: The source video file to process.
+* **`OUT_JSON`**: The filename for the raw detection data.
+* **`OUT_OVERLAY`**: The filename for the video preview of raw detections.
+* **`OUT_MASKS`**: The folder name where per-frame `.png` masks are stored.
+
+### Tracker Config (Phase 2)
+The `TRACKER_CONFIG` dictionary specifically manages the files for the tracking phase. **Note:** By default, these are programmed to automatically use the outputs from Phase 1.
+
+```python
+TRACKER_CONFIG = {
+    "input_video":  OUT_OVERLAY,    # Uses the video generated in Phase 1
+    "input_json":   OUT_JSON,       # Uses the JSON generated in Phase 1
+    "input_masks":  OUT_MASKS,      # Uses the masks generated in Phase 1
+    "output_json":  "tracks.json",  # Filename for final tracking data
+    "output_video": "final.mp4"     # Filename for final rendered video
+}
+```
+
+---
+
+
+## 4. Key Performance Settings
+
+### Detection (Phase 1)
+* **`MIN_AREA` / `MAX_AREA`**: Filters objects by pixel count (e.g., 80 to 50000).
+* **`FLUX_THRESHOLD`**: Sensitivity of motion detection (Default: `15`). Lower is more sensitive.
+* **`MEDIAN_FRAMES`**: Number of frames for background subtraction.
+
+### Tracking (Phase 2)
+* **`iou_match_thresh`**: Minimum overlap (0.0 to 1.0) to keep the same ID.
+* **`max_gap_frames`**: How many frames an object can "vanish" before the tracker gives up on the ID.
+* **`min_track_len`**: Minimum frames a track must exist to be saved (filters out "flicker" noise).
